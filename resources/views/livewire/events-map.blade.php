@@ -73,11 +73,15 @@
                                             <p class="font-semibold text-foreground truncate">{{ $event->title }}</p>
                                             <p class="text-sm text-gray-500 truncate">{{ $event->yayasan->name }}</p>
                                             <div class="mt-1">
-                                                @if($event->isOngoing())
+                                                @if($event->hasEnded())
+                                                    <span class="inline-block px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
+                                                        Ended {{ $event->end_date->format('M d, Y') }}
+                                                    </span>
+                                                @elseif($event->isPermanent())
                                                     <span class="inline-block px-2 py-0.5 bg-secondary/10 text-secondary text-xs font-semibold rounded-full">Ongoing</span>
                                                 @elseif($event->end_date)
                                                     <span class="inline-block px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full">
-                                                        Until {{ $event->end_date->format('M d') }}
+                                                        Until {{ $event->end_date->year !== now()->year ? $event->end_date->format('M d, Y') : $event->end_date->format('M d') }}
                                                     </span>
                                                 @endif
                                             </div>
@@ -194,10 +198,12 @@
         
         function createPopupContent(event) {
             let dateInfo = '';
-            if (event.isOngoing) {
+            if (event.hasEnded) {
+                dateInfo = `<span class="inline-block px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">Ended ${event.endDate}</span>`;
+            } else if (event.isPermanent) {
                 dateInfo = '<span class="inline-block px-2 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Ongoing</span>';
             } else if (event.endDate) {
-                dateInfo = `<span class="text-sm text-gray-500">${event.startDate || ''} - ${event.endDate}</span>`;
+                dateInfo = `<span class="inline-block px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full">Until ${event.endDate}</span>`;
             }
             
             return `

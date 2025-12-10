@@ -112,11 +112,27 @@ class Event extends Model
     }
 
     /**
-     * Check if this is an ongoing/permanent event.
+     * Check if this event has ended.
+     */
+    public function hasEnded(): bool
+    {
+        return $this->end_date !== null && $this->end_date->isPast();
+    }
+
+    /**
+     * Check if this is a permanent/ongoing event (no end date).
+     */
+    public function isPermanent(): bool
+    {
+        return $this->end_date === null;
+    }
+
+    /**
+     * Check if this is an ongoing/active event (no end date OR end date in future).
      */
     public function isOngoing(): bool
     {
-        return $this->end_date === null;
+        return $this->end_date === null || !$this->end_date->isPast();
     }
 
     /**

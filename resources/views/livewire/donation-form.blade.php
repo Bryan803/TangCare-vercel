@@ -89,8 +89,14 @@
                                         <div class="flex-1">
                                             <p class="font-semibold text-foreground">{{ $event->title }}</p>
                                             <p class="text-sm text-gray-500">{{ $event->yayasan->name }}</p>
-                                            @if($event->isOngoing())
+                                            @if($event->hasEnded())
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">Ended</span>
+                                            @elseif($event->isPermanent())
                                                 <span class="inline-block mt-1 px-2 py-0.5 bg-secondary/10 text-secondary text-xs font-semibold rounded-full">Ongoing</span>
+                                            @elseif($event->end_date)
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full">
+                                                    Until {{ $event->end_date->year !== now()->year ? $event->end_date->format('M d, Y') : $event->end_date->format('M d') }}
+                                                </span>
                                             @endif
                                         </div>
                                     </div>

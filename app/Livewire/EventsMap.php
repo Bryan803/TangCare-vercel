@@ -62,6 +62,8 @@ class EventsMap extends Component
                 'yayasan' => $yayasan->name,
                 'address' => $yayasan->address,
                 'description' => $event->description ? \Str::limit($event->description, 100) : null,
+                'hasEnded' => $event->hasEnded(),
+                'isPermanent' => $event->isPermanent(),
                 'isOngoing' => $event->isOngoing(),
                 'startDate' => $event->start_date?->format('M d, Y'),
                 'endDate' => $event->end_date?->format('M d, Y'),
