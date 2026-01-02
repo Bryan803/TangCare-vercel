@@ -56,8 +56,8 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
     
     // Donation Routes (for donors)
-    Route::get('/donate/{event?}', DonationForm::class)->name('donations.create');
     Route::get('/donate/success', DonationSuccess::class)->name('donations.success');
+    Route::get('/donate/{event?}', DonationForm::class)->name('donations.create');
 });
 
 // Yayasan Routes

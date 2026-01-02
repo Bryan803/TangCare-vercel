@@ -48,8 +48,10 @@ class DonationForm extends Component
         'photo.max' => 'Photo must be less than 5MB.',
     ];
 
-    public function mount(?int $event = null): void
+    public function mount($event = null): void
     {
+        // Cast to integer if it's a string
+        $this->event = is_numeric($event) ? (int)$event : $event;
         if (!auth()->check() || !auth()->user()->isDonor()) {
             abort(403, 'Only donors can make donations');
         }
@@ -59,8 +61,10 @@ class DonationForm extends Component
         }
     }
 
-    public function selectEvent(int $eventId): void
+    public function selectEvent($eventId): void
     {
+        $eventId = (int) $eventId;
+
         $event = Event::with('yayasan')
             ->active()
             ->whereHas('yayasan', fn($q) => $q->whereNotNull('verified_at'))
